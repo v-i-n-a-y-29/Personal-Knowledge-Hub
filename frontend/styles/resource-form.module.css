@@ -1,0 +1,28 @@
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.form label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.form input,
+.form textarea {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--surface-soft);
+  resize: vertical;
+}
+
+.form button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+}
