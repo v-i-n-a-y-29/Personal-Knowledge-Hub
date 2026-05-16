@@ -3,6 +3,7 @@ from typing import Annotated
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from pymongo.errors import DuplicateKeyError
 
 from app.api.deps import get_current_user
 from app.core.security import create_access_token, get_password_hash, verify_password
@@ -28,7 +29,10 @@ async def signup(payload: SignupRequest):
         "password_hash": get_password_hash(payload.password),
         "created_at": datetime.now(timezone.utc),
     }
-    await db.users.insert_one(user)
+    try:
+        await db.users.insert_one(user)
+    except DuplicateKeyError:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
 
     token = create_access_token(subject=user["_id"])
     return TokenResponse(
